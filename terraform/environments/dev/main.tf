@@ -1,5 +1,17 @@
 
 data "aws_caller_identity" "current" {}
+data "aws_cloudformation_export" "lex_bot_alias_arn" {
+  name = "LexBotAliasArn"
+}
+
+data "aws_cloudformation_export" "lex_bot_id" {
+  name = "LexBotId" 
+}
+
+data "aws_cloudformation_export" "lex_bot_arn" {
+  name = "LexBotArn"
+}
+
 
 module "glo" {
   source = "../../global"
@@ -42,11 +54,11 @@ module "lambda" {
   source = "../../modules/lambda"
   environment = var.environment
   dynamodb_table_arn = module.dynamodb.table_arn
-  lex_bot_id = module.iam.lex_bot_id
+  lex_bot_id = data.aws_cloudformation_export.lex_bot_id
   project_name = var.project_name
   dynamodb_table_name = module.dynamodb.table_name
-  lex_bot_alias_id = "placeholder"
-  lex_bot_arn = "arn:aws:lex:${var.aws_region}:${data.aws_caller_identity.current.account_id}:bot-alias/placeholder/placeholder"
+  lex_bot_alias_id = data.aws_cloudformation_export.lex_bot_alias_arn
+  lex_bot_arn = data.aws_cloudformation_export.lex_bot_arn
 }
 
 module "api_gateway" {

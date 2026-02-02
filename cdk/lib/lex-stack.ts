@@ -117,7 +117,8 @@ export class LexStack extends cdk.Stack {
           localeId: 'en_US',
           knowledgeBaseSupport: {
             knowledgeBaseId: props.bedrockKnowledgeBaseId,
-          }
+            enableKnowledgeBase: true,
+          },
         }
       ]
     });
@@ -142,5 +143,20 @@ export class LexStack extends cdk.Stack {
        
        Below assumes standard KnowledgeBase association for QnA.
     */
+
+    new cdk.CfnOutput(this, 'LexBotAliasArn', {
+      value: botAlias.attrArn,
+      exportName: 'LexBotAliasArn',
+    });
+      new cdk.CfnOutput(this, 'LexBotid', {
+      value: bot.attrId,
+      exportName: 'LexBotId',
+    });
+      new cdk.CfnOutput(this, 'LexBotArn', {
+      value: bot.attrArn,
+      exportName: 'LexBotArn',
+    });
   }
 }
+
+
